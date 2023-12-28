@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { useForm } from 'react-hook-form';
 import { FcGoogle } from 'react-icons/fc';
 import { useAppDispatch, useAppSelector } from '@/redux/hook';
-import { loginUser } from '@/redux/features/user/userSlice';
+import { googleLogin, loginUser } from '@/redux/features/user/userSlice';
 import { useNavigate } from 'react-router-dom';
 
 type UserAuthFormProps = React.HTMLAttributes<HTMLDivElement>;
@@ -33,6 +33,11 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
     console.log(data);
     dispatch(loginUser({email:data.email,password:data.password}))
   };
+
+  const handleGoogleLogin=()=>{
+       dispatch(googleLogin())
+  };
+  
 
   React.useEffect(()=>{
      if(user.email && !isLoading){
@@ -85,6 +90,7 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
         variant="outline"
         type="button"
         className="flex items-center justify-between"
+        onClick={handleGoogleLogin}
       >
         <p>Google</p>
         <FcGoogle />

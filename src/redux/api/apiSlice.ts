@@ -4,7 +4,8 @@ export const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
     baseUrl:
-      'https://technet-server-jqfq4s7gu-rizwanulwahid612-gmailcom.vercel.app',
+      'https://technet-server-r6egcbdjc-rizwanulwahid612-gmailcom.vercel.app',
+    //'https://technet-server-jqfq4s7gu-rizwanulwahid612-gmailcom.vercel.app',
   }),
   tagTypes: ['comments'],
   endpoints: () => ({}),

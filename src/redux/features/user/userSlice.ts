@@ -1,8 +1,11 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { auth } from '@/lib/firebase';
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
+  GoogleAuthProvider,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signInWithPopup,
 } from 'firebase/auth';
 
 interface IUserState {
@@ -41,7 +44,11 @@ export const loginUser = createAsyncThunk(
     return data.user.email;
   }
 );
-
+export const googleLogin = createAsyncThunk('user/googleLogin', async () => {
+  const googleProvider = new GoogleAuthProvider();
+  const data = await signInWithPopup(auth, googleProvider);
+  return data.user.email;
+});
 const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -76,6 +83,21 @@ const userSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(loginUser.rejected, (state, action) => {
+        state.user.email = null;
+        state.isError = true;
+        state.isLoading = false;
+        state.error = action.error.message!;
+      })
+      .addCase(googleLogin.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(googleLogin.fulfilled, (state, action) => {
+        state.user.email = action.payload;
+        state.isLoading = false;
+        state.isError = false;
+        state.error = '';
+      })
+      .addCase(googleLogin.rejected, (state, action) => {
         state.user.email = null;
         state.isError = true;
         state.isLoading = false;
